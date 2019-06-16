@@ -1,0 +1,11 @@
+# Use https://github.com/robbyrussell/oh-my-zsh/blob/master/plugins/ssh-agent/ssh-agent.plugin.zsh instead ?
+
+# Sane SSH_AUTH_SOCK handling for Screen and Tmux, so that new SSH agents created by subsequent logons are still usable.
+# https://gist.github.com/admackin/4507371
+_ssh_auth_save() {
+  rm "${HOME}/.ssh/ssh-auth-sock.${HOSTNAME}"
+  sleep 1
+  ln -sf "$SSH_AUTH_SOCK" "${HOME}/.ssh/ssh-auth-sock.${HOSTNAME}"
+}
+alias screen='_ssh_auth_save ; export HOSTNAME=$(hostname) ; screen'
+alias tmux='_ssh_auth_save ; export HOSTNAME=$(hostname) ; tmux'

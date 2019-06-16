@@ -1,0 +1,72 @@
+#!/bin/bash
+# Bash wrappers for docker run commands
+
+
+#
+# Helper Functions
+#
+dcleanup(){
+	docker rm $(docker ps --filter status=exited -q 2>/dev/null) 2>/dev/null
+	docker rm $(docker ps --filter status=created -q 2>/dev/null) 2>/dev/null
+	docker rmi $(docker images --filter dangling=true -q 2>/dev/null) 2>/dev/null
+	# docker images | grep '<none>' | awk '{print $3}' | xargs docker rmi 2>/dev/null
+	docker volume rm $(docker volume ls -qf dangling=true 2>/dev/null) 2>/dev/null
+}
+
+dfstats(){
+	docker stats $(docker ps --format={{.Names}})
+}
+
+moby(){
+	# Enter in Moby runtime (Docker's xhyve)
+	docker run -it --privileged --pid=host debian nsenter -t 1 -m -u -n -i ash
+}
+
+del_stopped(){
+	local name=$1
+	local state=$(docker inspect --format "{{.State.Running}}" $name 2>/dev/null)
+
+	if [[ "$state" == "false" ]]; then
+		docker rm $name
+	fi
+}
+relies_on(){
+	local containers=$@
+
+	for container in $containers; do
+		local state=$(docker inspect --format "{{.State.Running}}" $container 2>/dev/null)
+
+		if [[ "$state" == "false" ]] || [[ "$state" == "" ]]; then
+			echo "$container is not running, starting it for you."
+			$container
+		fi
+	done
+}
+
+#
+# Container Aliases
+#
+
+redis-server(){
+	docker run --restart=always --name redis -p 6379:6379 -itd redis:5-alpine 2>/dev/null
+}
+
+redis-cli(){
+	docker exec -it redis redis-cli "$@"
+}
+
+mongo(){
+	docker exec -it mongo mongo
+}
+
+mongo-server(){
+	docker run --restart=always --name mongo -p 27017:27017 -itd mongo 2>/dev/null
+}
+
+postgres-server(){
+	docker run --restart=always --name postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -itd postgres:10-alpine 2>/dev/null
+}
+
+psql(){
+	docker exec -it postgres psql "$@"
+}

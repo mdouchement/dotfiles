@@ -1,0 +1,68 @@
+# ~/.loadrc: executed by the command interpreter for login shells.
+
+
+# Preloader
+if [ -f ~/.hookrc ]
+then
+  . "${HOME}/.hookrc"
+fi
+
+# Increase prompt history
+export HISTFILESIZE=10000 # number of lines in the .bash_history, .zsh_history, etc.
+export HISTSIZE=10000 # number of lines in the shell instance
+# Default values
+export EDITOR='vim'
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color) color_prompt=yes;;
+esac
+
+if [ "$(TERM=xterm-256color tput colors)" = "256" ]; then
+  export TERM='xterm-256color'
+elif [ "$(TERM=gnome-256color tput colors)" = "256" ]; then
+  export TERM='gnome-256color'
+else
+  export TERM='xterm-color'
+fi
+
+
+alias ll='ls -alh'
+# Force git to us US locale
+alias git='LANG=en_US git'
+
+# User bin
+if [ -d ${HOME}/bin ]
+then
+  export PATH=${PATH}:${HOME}/bin
+fi
+
+# Tmux
+if [ -f ${HOME}/.tmuxrc ]
+then
+  . "${HOME}/.tmuxrc"
+fi
+
+# Golang (defines GOPATH variable)
+if [ -f ${HOME}/.gorc ]
+then
+  . "${HOME}/.gorc"
+fi
+
+# Python
+if [ -f ${HOME}/.pyrc ]
+then
+  . "${HOME}/.pyrc"
+fi
+
+# Docker Configuration
+if [ -f ${HOME}/.dockerfunc ]
+then
+  . "${HOME}/.dockerfunc"
+fi
+
+# Extra Configuration
+if [ -f ${HOME}/.extrarc ]
+then
+  . "${HOME}/.extrarc"
+fi

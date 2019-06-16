@@ -1,0 +1,66 @@
+" =======================================
+" .vimrc
+" [http://github.com/mdouchement/dotfiles]
+" Maintained By: mdouchement
+" =======================================
+
+set nocompatible " Disable legacy compatibility with `vi'
+let mapleader = ','
+
+function! s:SourceConfigFilesIn(directory)
+  let directory_splat = '~/.vim/' . a:directory . '/*'
+  for config_file in split(glob(directory_splat), '\n')
+    if filereadable(config_file)
+        execute 'source' config_file
+    endif
+  endfor
+endfunction
+
+" Plugins
+"---------
+call plug#begin('~/.vim/plugged')
+
+" Theme
+Plug 'itchyny/lightline.vim'
+Plug 'sickill/vim-monokai'
+
+" Syntax color
+Plug 'mdouchement/rspec.vim'
+Plug 'ekalinin/Dockerfile.vim'
+Plug 'cespare/vim-toml'
+
+" Tree files pane/tab
+Plug 'scrooloose/nerdtree'
+Plug 'jistr/vim-nerdtree-tabs'
+
+" Multiline code commenter
+Plug 'scrooloose/nerdcommenter'
+
+" Code helper
+Plug 'ervandew/supertab' " completion
+Plug 'tpope/vim-fugitive' " git
+Plug 'airblade/vim-gitgutter' " git
+""" RubyBlock
+Plug 'mdouchement/matchit.vim', { 'for': 'ruby' }
+Plug 'kana/vim-textobj-user', { 'for': 'ruby' }
+Plug 'nelstrom/vim-textobj-rubyblock', { 'for': 'ruby' }
+""" Snipets
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'tomtom/tlib_vim'
+Plug 'garbas/vim-snipmate'
+Plug 'honza/vim-snippets'
+
+" Plug 'fatih/vim-go'
+
+call plug#end()
+
+
+" Vimrc is split accross multiple files, so loop over and source each
+"---------------------------------------------------------------------
+call s:SourceConfigFilesIn('rcfiles')
+
+" Source a custom configuration file if available
+"-------------------------------------------------
+if filereadable("~/.vimrc.custom")
+  source ~/.vimrc.custom
+endif

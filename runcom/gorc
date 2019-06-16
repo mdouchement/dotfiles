@@ -1,0 +1,5 @@
+export DEP_GOPATH="${HOME}/.gopath"
+export DEV_GOPATH="${HOME}/workspaces/golang"
+export GOPATH="${DEP_GOPATH}:${DEV_GOPATH}"
+export PATH=${PATH}:${GOROOT}/bin:${DEP_GOPATH}/bin:${DEV_GOPATH}/bin
+alias atom='GOROOT=$(go env GOROOT) atom'
