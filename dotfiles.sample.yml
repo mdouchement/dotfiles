@@ -57,7 +57,7 @@ runcom:
 vim:
   vimrc:
     install: true
-    path: '~/.vim/vimrc'
+    path: '~/.vimrc'
   rcfiles:
     install: true
     path: '~/.vim/rcfiles'
