@@ -3,11 +3,18 @@
 - Auto `cd` to your favourite directories
 
 ```sh
-alias acd='set auto_cd ; cdpath=(${HOME}/workspaces/golang/src/github.com/mdouchement ${HOME}/workspaces/gomodules ${HOME}/workspaces/ruby)'
+function acd(){
+  setopt auto_cd
+  cdpath=(${HOME}/workspaces/golang/src/github.com/mdouchement ${HOME}/workspaces/golang/src/stash.ovh.net/voip ${HOME}/workspaces/gomodules)
+  $@
+}
 
 # Usage
 $ acd
 $ cd workerpool/
+
+# Or
+$ acd workerpool/
 ```
 
 - `exa` a modern version of ‘ls’.
