@@ -1,8 +1,11 @@
 package lualib
 
 import (
+	"fmt"
 	"io"
 	"os"
+	"os/exec"
+	"os/user"
 	"path/filepath"
 	"runtime"
 	"strconv"
@@ -21,6 +24,69 @@ var osLibrary = []lua.RegistryFunction{
 		},
 	},
 	{
+		// os.user_exists("myuser")
+		Name: "user_exists",
+		Function: func(l *lua.State) int {
+			username := lua.CheckString(l, 1)
+			_, err := user.Lookup(username)
+			l.PushBoolean(err == nil)
+			return 1
+		},
+	},
+	{
+		// os.user_id("myuser")
+		Name: "user_id",
+		Function: func(l *lua.State) int {
+			username := lua.CheckString(l, 1)
+			u, err := user.Lookup(username)
+			if err != nil {
+				lua.Errorf(l, err.Error())
+			}
+			l.PushString(u.Uid)
+			return 1
+		},
+	},
+	{
+		// os.group_id("mygroup")
+		Name: "group_id",
+		Function: func(l *lua.State) int {
+			groupname := lua.CheckString(l, 1)
+			g, err := user.LookupGroup(groupname)
+			if err != nil {
+				lua.Errorf(l, err.Error())
+			}
+			l.PushString(g.Gid)
+			return 1
+		},
+	},
+	{
+		// os.touch("/tmp/ldt.db")
+		Name: "touch",
+		Function: func(l *lua.State) int {
+			filename := lua.CheckString(l, 1)
+
+			if exist(filename) {
+				return 1
+			}
+
+			f, err := os.Create(filename)
+			if err != nil {
+				lua.Errorf(l, err.Error())
+			}
+			defer f.Close()
+			return 1
+		},
+	},
+	{
+		// os.exist("~/tmp/binary")
+		Name: "exist",
+		Function: func(l *lua.State) int {
+			path := lua.CheckString(l, 1)
+			l.PushBoolean(exist(path))
+			return 1
+		},
+	},
+	{
 		// os.chmod("~/tmp/binary", 0755)
 		Name: "chmod",
 		Function: func(l *lua.State) int {
@@ -33,6 +99,49 @@ var osLibrary = []lua.RegistryFunction{
 			if err = os.Chmod(name, os.FileMode(mode)); err != nil {
 				lua.Errorf(l, err.Error())
 			}
+			return 1
+		},
+	},
+	{
+		// os.chown("~/tmp/binary", 1001, 1001, true)  -> recursive
+		// os.chown("~/tmp/binary", 1001, 1001, false) -> not recursive
+		Name: "chown",
+		Function: func(l *lua.State) int {
+			root := lua.CheckString(l, 1)
+			uid := lua.CheckInteger(l, 2)
+			gid := lua.CheckInteger(l, 3)
+			recursive := l.ToBoolean(4)
+
+			if !recursive {
+				if err := os.Chown(root, uid, gid); err != nil {
+					lua.Errorf(l, err.Error())
+				}
+				return 1
+			}
+
+			err := filepath.Walk(root, func(path string, _ os.FileInfo, err error) error {
+				if err != nil {
+					return err
+				}
+				return os.Chown(path, uid, gid)
+			})
+
+			if err != nil {
+				lua.Errorf(l, err.Error())
+			}
+			return 1
+		},
+	},
+	{
+		// os.symlink("/tmp/ldt.db", "link.db")
+		Name: "symlink",
+		Function: func(l *lua.State) int {
+			src := lua.CheckString(l, 1)
+			dst := lua.CheckString(l, 2)
+			if err := os.Symlink(src, dst); err != nil {
+				lua.Errorf(l, err.Error())
+			}
+
 			return 1
 		},
 	},
@@ -83,6 +192,29 @@ var osLibrary = []lua.RegistryFunction{
 		},
 	},
 	{
+		// os.mv("/src", "/dst")
+		Name: "mv",
+		Function: func(l *lua.State) int {
+			src := lua.CheckString(l, 1)
+			dst := lua.CheckString(l, 2)
+
+			if exist(dst) {
+				stat, err := os.Stat(dst)
+				if err != nil {
+					lua.Errorf(l, err.Error())
+				}
+				if stat.IsDir() {
+					dst = filepath.Join(dst, filepath.Base(src))
+				}
+			}
+
+			if err := os.Rename(src, dst); err != nil {
+				lua.Errorf(l, err.Error())
+			}
+			return 1
+		},
+	},
+	{
 		// os.cp("go.mod")
 		Name: "rm",
 		Function: func(l *lua.State) int {
@@ -99,6 +231,60 @@ var osLibrary = []lua.RegistryFunction{
 		Function: func(l *lua.State) int {
 			dst := lua.CheckString(l, 1)
 			if err := os.RemoveAll(dst); err != nil {
+				lua.Errorf(l, err.Error())
+			}
+			return 1
+		},
+	},
+	{
+		// os.exec("useradd", "--no-create-home", "--shell", "/sbin/nologin", "myuser")
+		Name: "exec",
+		Function: func(l *lua.State) int {
+			name := lua.CheckString(l, 1)
+
+			var args []string
+			for i := 2; i <= l.Top(); i++ {
+				s, ok := l.ToString(i)
+				if !ok {
+					lua.Errorf(l, "arg[%d] = %v is not a string", i, l.ToValue(i))
+				}
+				args = append(args, s)
+			}
+
+			cmd := exec.Command(name, args...)
+			std, err := cmd.CombinedOutput()
+			if len(std) > 0 {
+				fmt.Println(string(std))
+			}
+			if err != nil {
+				lua.Errorf(l, err.Error())
+			}
+			return 1
+		},
+	},
+	{
+		// os.exec_in("/workdir", "useradd", "--no-create-home", "--shell", "/sbin/nologin", "myuser")
+		Name: "exec_in",
+		Function: func(l *lua.State) int {
+			workdir := lua.CheckString(l, 1)
+			name := lua.CheckString(l, 2)
+
+			var args []string
+			for i := 3; i <= l.Top(); i++ {
+				s, ok := l.ToString(i)
+				if !ok {
+					lua.Errorf(l, "arg[%d] = %v is not a string", i, l.ToValue(i))
+				}
+				args = append(args, s)
+			}
+
+			cmd := exec.Command(name, args...)
+			cmd.Dir = workdir
+			std, err := cmd.CombinedOutput()
+			if len(std) > 0 {
+				fmt.Println(string(std))
+			}
+			if err != nil {
 				lua.Errorf(l, err.Error())
 			}
 			return 1
@@ -184,4 +370,15 @@ func mkdirAllWithFilename(p string) {
 
 func mkdirAll(p string) {
 	_ = os.MkdirAll(p, 0755)
+}
+
+func exist(p string) bool {
+	_, err := os.Stat(p)
+	if err == nil {
+		return true
+	}
+	if os.IsNotExist(err) {
+		return false
+	}
+	return true // ignoring error
 }
