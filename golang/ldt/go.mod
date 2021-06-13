@@ -1,6 +1,6 @@
 module github.com/mdouchement/ldt
 
-go 1.12
+go 1.16
 
 require (
 	github.com/Shopify/go-lua v0.0.0-20201204192124-b252935ae7ee

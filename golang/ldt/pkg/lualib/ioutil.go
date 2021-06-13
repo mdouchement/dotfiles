@@ -9,6 +9,7 @@ import (
 var ioutilLibrary = []lua.RegistryFunction{
 	{
 		// ioutil.read_file("go.mod")
+		// Deprecated, use os.read_file instead
 		Name: "read_file",
 		Function: func(l *lua.State) int {
 			data, err := ioutil.ReadFile(lua.CheckString(l, 1))

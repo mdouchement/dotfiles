@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/Shopify/go-lua"
@@ -29,7 +30,7 @@ func main() {
 	c := &cobra.Command{
 		Use:     appname,
 		Short:   "Lua dotfiles tool",
-		Version: fmt.Sprintf("%s - build %.7s @ %s", version, revision, date),
+		Version: fmt.Sprintf("%s - build %.7s @ %s - %s", version, revision, date, runtime.Version()),
 		RunE:    action,
 	}
 	c.Flags().BoolVarP(&list, "list", "l", false, "List the actions")

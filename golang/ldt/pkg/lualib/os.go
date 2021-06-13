@@ -290,6 +290,18 @@ var osLibrary = []lua.RegistryFunction{
 			return 1
 		},
 	},
+	{
+		// os.read_file("go.mod")
+		Name: "read_file",
+		Function: func(l *lua.State) int {
+			data, err := os.ReadFile(lua.CheckString(l, 1))
+			if err != nil {
+				lua.Errorf(l, err.Error())
+			}
+			l.PushString(string(data))
+			return 1
+		},
+	},
 }
 
 // OSOpen opens the os library. Usually passed to Require (local os = require "lualib/os").
