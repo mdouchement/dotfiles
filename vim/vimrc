@@ -44,7 +44,7 @@ Plug 'airblade/vim-gitgutter' " git
 Plug 'mdouchement/matchit.vim', { 'for': 'ruby' }
 Plug 'kana/vim-textobj-user', { 'for': 'ruby' }
 Plug 'nelstrom/vim-textobj-rubyblock', { 'for': 'ruby' }
-""" Snipets
+""" snippets
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
 Plug 'garbas/vim-snipmate'
