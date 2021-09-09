@@ -1,5 +1,10 @@
 # ~/.loadrc: executed by the command interpreter for login shells.
 
+# User bin
+if [ -d ${HOME}/bin ]
+then
+  export PATH=${PATH}:${HOME}/bin
+fi
 
 # Preloader
 if [ -f ~/.hookrc ]
@@ -30,12 +35,6 @@ fi
 alias ll='ls -alh'
 # Force git to us US locale
 alias git='LANG=en_US git'
-
-# User bin
-if [ -d ${HOME}/bin ]
-then
-  export PATH=${PATH}:${HOME}/bin
-fi
 
 # Tmux
 if [ -f ${HOME}/.tmuxrc ]
