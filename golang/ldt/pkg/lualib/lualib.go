@@ -9,4 +9,5 @@ func Open(l *lua.State) {
 	HTTPOpen(l)
 	IOUtilOpen(l)
 	YAMLOpen(l)
+	StringsOpen(l)
 }

@@ -9,7 +9,7 @@ import (
 var ioutilLibrary = []lua.RegistryFunction{
 	{
 		// ioutil.read_file("go.mod")
-		// Deprecated, use os.read_file instead
+		// Deprecated: Use os.read_file instead
 		Name: "read_file",
 		Function: func(l *lua.State) int {
 			data, err := ioutil.ReadFile(lua.CheckString(l, 1))
@@ -23,6 +23,7 @@ var ioutilLibrary = []lua.RegistryFunction{
 }
 
 // IOUtilOpen opens the ioutil library. Usually passed to Require (local ioutil = require "lualib/ioutil").
+// Deprecated: Use os instead
 func IOUtilOpen(l *lua.State) {
 	open := func(l *lua.State) int {
 		lua.NewLibrary(l, ioutilLibrary)

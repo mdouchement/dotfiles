@@ -255,6 +255,7 @@ var osLibrary = []lua.RegistryFunction{
 			std, err := cmd.CombinedOutput()
 			if len(std) > 0 {
 				fmt.Println(string(std))
+				l.PushString(string(std))
 			}
 			if err != nil {
 				lua.Errorf(l, err.Error())
@@ -283,6 +284,7 @@ var osLibrary = []lua.RegistryFunction{
 			std, err := cmd.CombinedOutput()
 			if len(std) > 0 {
 				fmt.Println(string(std))
+				l.PushString(string(std))
 			}
 			if err != nil {
 				lua.Errorf(l, err.Error())
@@ -294,11 +296,25 @@ var osLibrary = []lua.RegistryFunction{
 		// os.read_file("go.mod")
 		Name: "read_file",
 		Function: func(l *lua.State) int {
-			data, err := os.ReadFile(lua.CheckString(l, 1))
+			payload, err := os.ReadFile(lua.CheckString(l, 1))
 			if err != nil {
 				lua.Errorf(l, err.Error())
 			}
-			l.PushString(string(data))
+			l.PushString(string(payload))
+			return 1
+		},
+	},
+	{
+		// os.write_file("go.mod", payload)
+		Name: "write_file",
+		Function: func(l *lua.State) int {
+			filename := lua.CheckString(l, 1)
+			payload := lua.CheckString(l, 2)
+
+			err := os.WriteFile(filename, []byte(payload), 0644)
+			if err != nil {
+				lua.Errorf(l, err.Error())
+			}
 			return 1
 		},
 	},

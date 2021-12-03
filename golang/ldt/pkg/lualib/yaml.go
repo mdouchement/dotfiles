@@ -3,10 +3,28 @@ package lualib
 import (
 	"github.com/Shopify/go-lua"
 	"github.com/Shopify/goluago/util"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 var yamlLibrary = []lua.RegistryFunction{
+	{
+		// yaml.generate({key: "table value"})
+		Name: "generate",
+		Function: func(l *lua.State) int {
+			table, err := util.PullTable(l, 1)
+			if err != nil {
+				lua.Errorf(l, err.Error())
+			}
+
+			payload, err := yaml.Marshal(table)
+			if err != nil {
+				lua.Errorf(l, err.Error())
+			}
+			l.PushString(string(payload))
+
+			return 1
+		},
+	},
 	{
 		// yaml.parse("key: value")
 		Name: "parse",

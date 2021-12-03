@@ -13,7 +13,13 @@ fi
 # Hombrew & Hombrecask in the $HOME folder
 export HOMEBREW_CASK_OPTS="--appdir=~/Applications"
 export PATH=${HOME}/homebrew/bin:${PATH}
+
+alias rbrew='HOMEBREW_CASK_OPTS="--appdir=/Applications" brew'
 ```
+
+https://www.scivision.dev/macos-homebrew-non-sudo/
+=> `mkdir homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C homebrew`
+
 
 - ZSH (completion)
 
