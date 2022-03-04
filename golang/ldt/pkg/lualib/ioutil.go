@@ -16,6 +16,7 @@ var ioutilLibrary = []lua.RegistryFunction{
 			if err != nil {
 				lua.Errorf(l, err.Error())
 			}
+
 			l.PushString(string(data))
 			return 1
 		},

@@ -1,6 +1,7 @@
 package lualib
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"os"
@@ -29,6 +30,7 @@ var osLibrary = []lua.RegistryFunction{
 		Function: func(l *lua.State) int {
 			username := lua.CheckString(l, 1)
 			_, err := user.Lookup(username)
+
 			l.PushBoolean(err == nil)
 			return 1
 		},
@@ -42,6 +44,7 @@ var osLibrary = []lua.RegistryFunction{
 			if err != nil {
 				lua.Errorf(l, err.Error())
 			}
+
 			l.PushString(u.Uid)
 			return 1
 		},
@@ -55,6 +58,7 @@ var osLibrary = []lua.RegistryFunction{
 			if err != nil {
 				lua.Errorf(l, err.Error())
 			}
+
 			l.PushString(g.Gid)
 			return 1
 		},
@@ -66,7 +70,7 @@ var osLibrary = []lua.RegistryFunction{
 			filename := lua.CheckString(l, 1)
 
 			if exist(filename) {
-				return 1
+				return 0
 			}
 
 			f, err := os.Create(filename)
@@ -74,7 +78,8 @@ var osLibrary = []lua.RegistryFunction{
 				lua.Errorf(l, err.Error())
 			}
 			defer f.Close()
-			return 1
+
+			return 0
 		},
 	},
 	{
@@ -83,6 +88,7 @@ var osLibrary = []lua.RegistryFunction{
 		Function: func(l *lua.State) int {
 			path := lua.CheckString(l, 1)
 			l.PushBoolean(exist(path))
+
 			return 1
 		},
 	},
@@ -99,7 +105,7 @@ var osLibrary = []lua.RegistryFunction{
 			if err = os.Chmod(name, os.FileMode(mode)); err != nil {
 				lua.Errorf(l, err.Error())
 			}
-			return 1
+			return 0
 		},
 	},
 	{
@@ -116,7 +122,8 @@ var osLibrary = []lua.RegistryFunction{
 				if err := os.Chown(root, uid, gid); err != nil {
 					lua.Errorf(l, err.Error())
 				}
-				return 1
+
+				return 0
 			}
 
 			err := filepath.Walk(root, func(path string, _ os.FileInfo, err error) error {
@@ -129,7 +136,8 @@ var osLibrary = []lua.RegistryFunction{
 			if err != nil {
 				lua.Errorf(l, err.Error())
 			}
-			return 1
+
+			return 0
 		},
 	},
 	{
@@ -142,7 +150,7 @@ var osLibrary = []lua.RegistryFunction{
 				lua.Errorf(l, err.Error())
 			}
 
-			return 1
+			return 0
 		},
 	},
 	{
@@ -153,7 +161,8 @@ var osLibrary = []lua.RegistryFunction{
 			if err := os.Mkdir(folder, 0755); err != nil {
 				lua.Errorf(l, err.Error())
 			}
-			return 1
+
+			return 0
 		},
 	},
 	{
@@ -164,7 +173,8 @@ var osLibrary = []lua.RegistryFunction{
 			if err := os.MkdirAll(folder, 0755); err != nil {
 				lua.Errorf(l, err.Error())
 			}
-			return 1
+
+			return 0
 		},
 	},
 	{
@@ -176,7 +186,8 @@ var osLibrary = []lua.RegistryFunction{
 			if err := copy(src, dst); err != nil {
 				lua.Errorf(l, err.Error())
 			}
-			return 1
+
+			return 0
 		},
 	},
 	{
@@ -188,7 +199,8 @@ var osLibrary = []lua.RegistryFunction{
 			if err := copyRF(src, dst); err != nil {
 				lua.Errorf(l, err.Error())
 			}
-			return 1
+
+			return 0
 		},
 	},
 	{
@@ -211,7 +223,8 @@ var osLibrary = []lua.RegistryFunction{
 			if err := os.Rename(src, dst); err != nil {
 				lua.Errorf(l, err.Error())
 			}
-			return 1
+
+			return 0
 		},
 	},
 	{
@@ -222,7 +235,8 @@ var osLibrary = []lua.RegistryFunction{
 			if err := os.Remove(filename); err != nil {
 				lua.Errorf(l, err.Error())
 			}
-			return 1
+
+			return 0
 		},
 	},
 	{
@@ -233,7 +247,8 @@ var osLibrary = []lua.RegistryFunction{
 			if err := os.RemoveAll(dst); err != nil {
 				lua.Errorf(l, err.Error())
 			}
-			return 1
+
+			return 0
 		},
 	},
 	{
@@ -253,13 +268,16 @@ var osLibrary = []lua.RegistryFunction{
 
 			cmd := exec.Command(name, args...)
 			std, err := cmd.CombinedOutput()
-			if len(std) > 0 {
-				fmt.Println(string(std))
-				l.PushString(string(std))
-			}
+
 			if err != nil {
 				lua.Errorf(l, err.Error())
 			}
+
+			if len(std) > 0 {
+				fmt.Println(string(std))
+			}
+
+			l.PushString(string(std))
 			return 1
 		},
 	},
@@ -282,14 +300,65 @@ var osLibrary = []lua.RegistryFunction{
 			cmd := exec.Command(name, args...)
 			cmd.Dir = workdir
 			std, err := cmd.CombinedOutput()
-			if len(std) > 0 {
-				fmt.Println(string(std))
-				l.PushString(string(std))
-			}
 			if err != nil {
 				lua.Errorf(l, err.Error())
 			}
+
+			if len(std) > 0 {
+				fmt.Println(string(std))
+			}
+
+			l.PushString(string(std))
 			return 1
+		},
+	},
+	{
+		// local stdout, stderr = os.exec_catched("useradd", "--no-create-home", "--shell", "/sbin/nologin", "myuser")
+		Name: "exec_catched",
+		Function: func(l *lua.State) int {
+			name := lua.CheckString(l, 1)
+
+			var args []string
+			for i := 2; i <= l.Top(); i++ {
+				s, ok := l.ToString(i)
+				if !ok {
+					lua.Errorf(l, "arg[%d] = %v is not a string", i, l.ToValue(i))
+				}
+				args = append(args, s)
+			}
+
+			cmd := exec.Command(name, args...)
+			var stdout bytes.Buffer
+			cmd.Stdout = &stdout
+			var stderr bytes.Buffer
+			cmd.Stderr = &stderr
+			err := cmd.Run()
+
+			//
+
+			if stdout.Len() != 0 {
+				l.PushString(stdout.String())
+			} else {
+				l.PushNil()
+			}
+
+			//
+
+			if err != nil {
+				std := stderr.String()
+				stderr.Reset()
+				stderr.WriteString(err.Error() + ": " + std)
+			}
+
+			if stderr.Len() != 0 {
+				l.PushString(stderr.String())
+			} else {
+				l.PushNil()
+			}
+
+			//
+
+			return 2
 		},
 	},
 	{
@@ -300,6 +369,7 @@ var osLibrary = []lua.RegistryFunction{
 			if err != nil {
 				lua.Errorf(l, err.Error())
 			}
+
 			l.PushString(string(payload))
 			return 1
 		},
@@ -315,7 +385,8 @@ var osLibrary = []lua.RegistryFunction{
 			if err != nil {
 				lua.Errorf(l, err.Error())
 			}
-			return 1
+
+			return 0
 		},
 	},
 }

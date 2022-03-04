@@ -43,6 +43,7 @@ var filepathLibrary = []lua.RegistryFunction{
 				}
 				vargs = append(vargs, s)
 			}
+
 			l.PushString(filepath.Join(vargs...))
 			return 1
 		},
