@@ -20,8 +20,8 @@ var yamlLibrary = []lua.RegistryFunction{
 			if err != nil {
 				lua.Errorf(l, err.Error())
 			}
-			l.PushString(string(payload))
 
+			l.PushString(string(payload))
 			return 1
 		},
 	},
@@ -34,6 +34,7 @@ var yamlLibrary = []lua.RegistryFunction{
 			if err := yaml.Unmarshal([]byte(payload), &output); err != nil {
 				lua.Errorf(l, err.Error())
 			}
+
 			return util.DeepPush(l, output)
 		},
 	},

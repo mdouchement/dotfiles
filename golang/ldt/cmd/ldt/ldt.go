@@ -10,8 +10,8 @@ import (
 	"github.com/Shopify/go-lua"
 	"github.com/Shopify/goluago"
 	"github.com/mdouchement/ldt/pkg/lualib"
+	"github.com/muesli/coral"
 	"github.com/pkg/errors"
-	"github.com/spf13/cobra"
 )
 
 const (
@@ -27,7 +27,7 @@ var (
 )
 
 func main() {
-	c := &cobra.Command{
+	c := &coral.Command{
 		Use:     appname,
 		Short:   "Lua dotfiles tool",
 		Version: fmt.Sprintf("%s - build %.7s @ %s - %s", version, revision, date, runtime.Version()),
@@ -41,7 +41,7 @@ func main() {
 	}
 }
 
-func action(_ *cobra.Command, args []string) error {
+func action(_ *coral.Command, args []string) error {
 	if list || len(args) == 0 {
 		return listActions()
 	}

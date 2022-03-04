@@ -65,7 +65,7 @@ var httpLibrary = []lua.RegistryFunction{
 
 			var r io.Reader = resp.Body
 			if showProgress {
-				defer time.Sleep(500*time.Millisecond) // just to avoid glitches.
+				defer time.Sleep(500 * time.Millisecond) // just to avoid glitches.
 				r = withProgressBar(resp.ContentLength, r)
 			}
 
@@ -76,7 +76,8 @@ var httpLibrary = []lua.RegistryFunction{
 			if err = f.Sync(); err != nil {
 				lua.Errorf(l, err.Error())
 			}
-			return 1
+
+			return 0
 		},
 	},
 }
