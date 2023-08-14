@@ -1,5 +1,7 @@
 # Dotfiles
 
+[https://github.com/mdouchement/ldt](https://github.com/mdouchement/ldt)
+
 ## General usage
 
 ```sh
