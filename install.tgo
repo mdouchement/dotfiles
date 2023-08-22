@@ -1,0 +1,51 @@
+filepath := import("filepath")
+fmt      := import("fmt")
+http     := import("http")
+ldt      := import("ldt")
+os       := import("os")
+yaml     := import("yaml")
+
+endpoint := "https://github.com/mdouchement/dotfiles/releases/download/binaries/"
+
+if len(os.args()) != 3 {
+    ldt.halt("You must provide your `dotfiles.yml' as the only argument")
+}
+
+config_path := os.args()[2]
+stat := os.stat(config_path)
+ldt.catch(stat).halt()
+
+config := yaml.decode(os.read_file(config_path))
+ldt.catch(config).halt()
+
+for section, entries in config {
+    fmt.println("== " + section + " ==")
+
+    for filename, entry in entries {
+        if entry["install"] {
+            fmt.println("  Installing: " + filename)
+
+            src := filepath.join(section, filename)
+            if section == "bin" {
+                src = http.join(endpoint, filename+"-"+os.osname()+"-amd64") // limeline-darwin-amd64
+            }
+
+            dst := filepath.expand(entry["path"]) // Expand environment variables and custom characters
+            err = os.mkdir_all(filepath.dirname(dst), os.chmod_d)
+            ldt.catch(err).halt()
+
+            if section == "bin" {
+                ldt.catch(
+                    http.download(src, dst, true),
+                    os.chmod(dst, 0755)
+                ).halt()
+            } else {
+                ldt.catch( os.cp_rf(src, dst) ).halt()
+            }
+
+            fmt.println("  -> " + dst)
+        }
+    }
+
+    fmt.println("")
+}

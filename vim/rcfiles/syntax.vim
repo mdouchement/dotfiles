@@ -1,0 +1,1 @@
+autocmd BufRead,BufNewFile *.tgo set filetype=tengo
