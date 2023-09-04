@@ -31,7 +31,7 @@ for section, entries in config {
             }
 
             dst := filepath.expand(entry["path"]) // Expand environment variables and custom characters
-            err = os.mkdir_all(filepath.dirname(dst), os.chmod_d)
+            err := os.mkdir_all(filepath.dirname(dst), os.chmod_d)
             ldt.catch(err).halt()
 
             if section == "bin" {
