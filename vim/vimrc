@@ -28,6 +28,7 @@ Plug 'sickill/vim-monokai'
 Plug 'mdouchement/rspec.vim'
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'cespare/vim-toml'
+Plug 'geseq/tengo-vim'
 
 " Tree files pane/tab
 Plug 'scrooloose/nerdtree'
@@ -40,6 +41,7 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'ervandew/supertab' " completion
 Plug 'tpope/vim-fugitive' " git
 Plug 'airblade/vim-gitgutter' " git
+Plug 'editorconfig/editorconfig-vim'
 """ RubyBlock
 Plug 'mdouchement/matchit.vim', { 'for': 'ruby' }
 Plug 'kana/vim-textobj-user', { 'for': 'ruby' }
