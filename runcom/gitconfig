@@ -1,8 +1,8 @@
 # This is Git's per-user configuration file.
 [user]
   name = mdouchement
-  email = marc.douchement@gmail.com
-  signingkey = A27FD4D5
+  email = 6150317+mdouchement@users.noreply.github.com
+  signingkey = C2200679C255B1C1
 [rerere]
 	enabled = true
 [filter "lfs"]
