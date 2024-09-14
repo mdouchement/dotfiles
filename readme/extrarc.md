@@ -17,7 +17,7 @@ $ cd workerpool/
 $ acd workerpool/
 ```
 
-- `exa` a modern version of ‘ls’.
+- `exa` a modern version of 'ls'.
 
 https://github.com/ogham/exa
 
@@ -30,7 +30,20 @@ alias ll="exa -al --group-directories-first"
 https://github.com/BurntSushi/ripgrep
 
 ```sh
-alias rg='rg -g "!*GODOC.md" -g "!/vendor/"'
+alias rg='rg -g "!*GODOC.md" -g "!/vendor/" -g "!/node_modules/"'
+```
+
+- Archiver
+
+```sh
+alias arca='arc archive'
+alias arcu='arc unarchive'
+```
+
+- Yaegi
+
+```sh
+alias yaegi='rlwrap yaegi'
 ```
 
 - Use Hombrew `curl`
@@ -102,5 +115,30 @@ alias nodejs=node
 ```sh
 function mem-usage() {
   ps -eo size,pid,user,command --sort -size | awk '{ hr=$1/1024 ; printf("%13.2f Mb ",hr) } { for ( x=4 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
+}
+```
+
+- Golang
+
+```sh
+go build -ldflags "-s -w" -o ~/bin/$(basename $(pwd)) .
+```
+
+```sh
+function gofinn() {
+  (
+    set -x
+    GOOS=linux go build -ldflags "-s -w" -o $1 $2
+    finn $1
+    rm $1
+  )
+}
+```
+
+- cURL + TLS check
+
+```sh
+curt () {
+	curl --insecure -v $@ 2>&1 | awk 'BEGIN { cert=0 } /^\* SSL connection/ { cert=1 } /^\*/ { if (cert) print }'
 }
 ```
