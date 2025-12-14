@@ -1,0 +1,63 @@
+bin:
+  # tmux binaries
+  tline:
+    install: true
+    path: '~/bin/tline'
+  tlined:
+    install: true
+    path: '~/bin/tlined'
+
+function:
+  dockerfunc:
+    install: true
+    path: '~/.dockerfunc'
+
+tmux:
+  tline-tmux.conf:
+    install: true
+    path: '~/.tline-tmux.conf'
+  tmux.conf:
+    install: true
+    path: '~/.tmux.conf'
+  # The only-one that can be false
+  tmuxrc:
+    install: false
+    path: '~/.tmuxrc'
+
+runcom:
+  # Shell + loaders
+  zshrc:
+    install: true
+    path: '~/.zshrc'
+  legacy.zsh-theme:
+    install: true
+    path: '~/.oh-my-zsh/custom/themes/legacy.zsh-theme'
+  loadrc:
+    install: true
+    path: '~/.loadrc'
+  # Golang
+  gorc:
+    install: true
+    path: '~/.gorc'
+  # Ruby
+  gemrc:
+    install: true
+    path: '~/.gemrc'
+  rspec:
+    install: true
+    path: '~/.rspec'
+  # Misc
+  gitconfig:
+    install: false
+    path: '~/.gitconfig'
+  curlrc:
+    install: true
+    path: '~/.curlrc'
+
+vim:
+  vimrc:
+    install: true
+    path: '~/.vimrc'
+  rcfiles:
+    install: true
+    path: '~/.vim/rcfiles'

@@ -52,7 +52,8 @@ Plug 'tomtom/tlib_vim'
 Plug 'garbas/vim-snipmate'
 Plug 'honza/vim-snippets'
 
-" Plug 'fatih/vim-go'
+Plug 'fatih/vim-go', { 'for': 'go' }
+Plug 'dense-analysis/ale'
 
 call plug#end()
 

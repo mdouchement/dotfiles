@@ -42,6 +42,13 @@ Extensions:
   Publisher: Gruntfuggly\
   VS Marketplace Link: https://open-vsx.org/vscode/item?itemName=Gruntfuggly.todo-tree
 
+- Name: Bracket Pair Colorizer 2\
+  Id: CoenraadS.bracket-pair-colorizer-2\
+  Description: A customizable extension for colorizing matching brackets\
+  Version: 0.1.4\
+  Publisher: CoenraadS\
+  VS Marketplace Link: https://open-vsx.org/vscode/item?itemName=CoenraadS.bracket-pair-colorizer-2\
+
 Settings:
 
 `user/settings.json`
@@ -85,5 +92,78 @@ Settings:
     ],
     "todo-tree.regex.regex": "(//|--|#|<!--|;|/\\*|^|^[ \\t]*(-|\\d+.)).*[^\\w]($TAGS)([^\\p{L}]|$)",
     "editor.fontFamily": "Source Code Pro for Powerline"
+}
+```
+
+Other variant
+```json
+{
+    "workbench.startupEditor": "newUntitledFile",
+    "workbench.colorTheme": "Monokai",
+    "editor.fontFamily": "Source Code Pro for Powerline",
+    "editor.fontSize": 16,
+    "workbench.iconTheme": "file-icons",
+    "explorer.confirmDragAndDrop": false,
+    "explorer.autoReveal": false,
+    "go.editorContextMenuCommands": {
+        "toggleTestFile": false,
+        "addTags": true,
+        "removeTags": false,
+        "fillStruct": false,
+        "testAtCursor": false,
+        "testFile": false,
+        "testPackage": false,
+        "generateTestForFunction": false,
+        "generateTestForFile": false,
+        "generateTestForPackage": false,
+        "addImport": true,
+        "testCoverage": false,
+        "playground": false,
+        "debugTestAtCursor": false,
+        "benchmarkAtCursor": false
+    },
+    "go.toolsManagement.autoUpdate": true,
+    "go.lintOnSave": "package",
+    "go.useLanguageServer": true,
+    "gopls": {
+        "formatting.gofumpt": true,
+        "formatting.local": "stash.ovh.net/",
+        "analyses": {
+            "unusedparams": false
+        }
+    },
+    "go.lintTool": "golangci-lint",
+    "go.formatTool": "gofumpt",
+    "go.formatFlags": [
+        "-w"
+    ],
+    "security.workspace.trust.untrustedFiles": "open",
+    "git.openRepositoryInParentFolders": "never",
+    "todo-tree.highlights.useColourScheme": true,
+    "todo-tree.highlights.backgroundColourScheme": [
+        "red",
+        "C71585",
+        "FF8C00",
+        "32CD32",
+        "blue",
+        "indigo",
+        "violet"
+    ],
+    "todo-tree.regex.regex": "(//|--|#|<!--|;|/\\*|^|^[ \\t]*(-|\\d+.))[^\\p{L}]*($TAGS)[^\\p{L}]",
+    "php.validate.enable": false,
+    "php.suggest.basic": false,
+    "go.playground": {
+        "openbrowser": false,
+        "share": false,
+        "run": false
+    },
+    "go.enableCodeLens": {
+        "runtest": false
+    },
+    "[tengo]": {},
+    "files.associations": {
+        "*.tgo": "tengo"
+    },
+    "go.coverOnTestPackage": false,
 }
 ```
