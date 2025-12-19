@@ -1,7 +1,15 @@
-runcom:
+config:
   fish:
     install: true
     path: '~/.config/fish'
+  rio:
+    install: false
+    path: '~/.config/rio'
+  zed:
+    install: false
+    path: '~/.config/rio'
+
+runcom:
   # Ruby
   gemrc:
     install: false

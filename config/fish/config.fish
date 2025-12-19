@@ -34,6 +34,7 @@ end
 
 #alias gpg='LANG=en_US gpg'
 alias ll='eza -al --group-directories-first'
+alias tree='eza --tree'
 alias rg='rg -g "!*GODOC.md" -g "!/vendor/"'
 
 if test -e ~/.extra.fish
