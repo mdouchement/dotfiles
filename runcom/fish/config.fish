@@ -1,5 +1,5 @@
 set fish_greeting ""
-set fish_private_mode "private"
+# set fish_private_mode 1 # Start in private mode
 set -gx EDITOR vim
 set -gx LANG en_US
 
