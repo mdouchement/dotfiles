@@ -22,6 +22,19 @@ $ cd dotfiles
 $ ldt install ~/.config/dotfiles.yml
 ```
 
+## Fish
+
+```sh
+$ chsh -s /usr/bin/fish
+
+$ cd dotfiles
+$ ldt install ~/.config/dotfiles.yml
+
+# https://github.com/catppuccin/fish
+$ fisher install catppuccin/fish
+$ fish_config theme save "Catppuccin Mocha"
+```
+
 ## VIM
 
 ```sh
@@ -34,9 +47,7 @@ $ ldt install ~/.config/dotfiles.yml
 $ vim +PlugInstall
 ```
 
-## Powerline Fonts
-
-https://github.com/powerline/fonts/tree/master/SourceCodePro
+## Nerd Fonts
 
 - macOS
 
@@ -45,8 +56,14 @@ Just double clic on it and install
 - Linux
 
 ```sh
-cp fonts/Source_Code_Pro_Medium_for_Powerline.otf ~/.local/share/fonts/
+cp fonts/*.ttf ~/.local/share/fonts/
 fc-cache -vf ~/.local/share/fonts/
+```
+
+## Gnome
+
+```sh
+gsettings set org.gnome.desktop.default-applications.terminal exec '/usr/bin/konsole'
 ```
 
 ## License
