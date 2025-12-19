@@ -7,7 +7,7 @@ config:
     path: '~/.config/rio'
   zed:
     install: false
-    path: '~/.config/rio'
+    path: '~/.config/zed'
 
 runcom:
   # Ruby
