@@ -61,7 +61,7 @@ theme = "Monokai Classic"
 # This configuration only has effect if use-fork is disabled.
 #
 # Example:
-# working-dir = "/Users/raphael/Documents/"
+working-dir = "~/"
 
 # Environment variables
 #
@@ -132,9 +132,9 @@ confirm-before-quit = false
 #     - "rec2020"
 #
 # Example:
-# [window]
-# width = 600
-# height = 400
+[window]
+width = 1920
+height = 1080
 # mode = "windowed"
 # opacity = 1.0
 # blur = false
@@ -199,7 +199,8 @@ confirm-before-quit = false
 # You can also set family on root to overwrite all fonts.
 [fonts]
 size = 16
-family = "SauceCodePro Nerd Font"
+family = "SauceCodePro Nerd Font Mono"
+
 #
 # You can also specify extra fonts to load
 # [fonts]
@@ -342,12 +343,11 @@ program = "fish"
 # More information in: https://raphamorim.io/rio/docs/key-bindings
 #
 # Example:
-# [bindings]
-# keys = [
-#   { key = "q", with = "super", action = "Quit" },
-#   # Send escape sequence to clear screen
-#   { key = "l", with = "control", esc = "\u001b[2J\u001b[H" }
-# ]
+[bindings]
+keys = [
+  { key = "left", with = "shift", action = "SelectPrevTab" },
+  { key = "right", with = "shift", action = "SelectNextTab" },
+]
 
 # Platform
 #
