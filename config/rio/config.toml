@@ -347,6 +347,12 @@ program = "fish"
 keys = [
   { key = "left", with = "shift", action = "SelectPrevTab" },
   { key = "right", with = "shift", action = "SelectNextTab" },
+  { key = "pageup", action = "ScrollPageUp" },
+  { key = "pagedown", action = "ScrollPageDown" },
+  { key = "up", with = "control|shift", action = "MoveDividerUp" },
+  { key = "down", with = "control|shift", action = "MoveDividerDown" },
+  { key = "right", with = "control|shift", action = "MoveDividerRight" },
+  { key = "left", with = "control|shift", action = "MoveDividerLeft" },
 ]
 
 # Platform
