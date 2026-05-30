@@ -9,3 +9,7 @@ function spacer --argument-names 'n'
     set i (math $i + 1)
   end
 end
+
+function exit-status
+  echo $status
+end
