@@ -58,10 +58,11 @@ end
 # Icons
 # https://starship.rs/presets/nerd-font
 
-distrobox create --name Arch --hostname (hostname) --additional-flags "--env TOZAI_MACHINE_NAME='' --env SHELL=/usr/bin/fish" --image docker.io/library/archlinux:latest --additional-packages "zed"
+distrobox create --name Arch --hostname (hostname) --additional-flags "--env TOZAI_MACHINE_NAME='' --env SHELL=/usr/bin/fish" --image docker.io/library/archlinux:latest --additional-packages "fish zed"
 
 distrobox create --name f43 --hostname (hostname) --additional-flags "--env TOZAI_MACHINE_NAME='\' --env SHELL=/usr/bin/fish" --image quay.io/fedora/fedora:43
 ```
+> If an error happen when entering the the box, try to put `--pids-limit=4096` in additional-flags
 
 ```fish
 alias dua='distrobox upgrade --all'
